@@ -1,20 +1,18 @@
 # LUMORA Architecture
 
-## About LUMORA
+LUMORA is designed to be extended and adapted to different business scenarios.
 
-LUMORA is a multi-tenant SaaS platform designed to help businesses transform operational data into actionable decisions through dashboards, KPIs and AI-powered insights.
+You can customize:
 
-The idea for LUMORA was born from my professional experience as a Data Analyst in the retail sector, where I worked extensively with sales, inventory, executive reporting and business intelligence. One recurring challenge was seeing decision-makers depend on multiple reports, spreadsheets and manual processes just to understand what was happening in their business.
+- Business domains
+- Data sources
+- Dashboard modules
+- AI capabilities
+- Security rules
+- Integrations
 
-That experience inspired a simple question:
+The architecture has been designed to allow new features without affecting existing components.
 
-> What if executives could access all their business insights from a single platform and even ask questions to an AI assistant?
-
-LUMORA is my attempt to build that solution.
-
-More importantly, LUMORA represents my own professional transition from **Data Analyst** to **Java Software Developer**, allowing me to combine nearly two decades of business experience with modern software engineering practices. Every feature I build is an opportunity to transform real business knowledge into software while continuing to grow as a developer.
-
----
 
 ## High-Level Architecture
 
