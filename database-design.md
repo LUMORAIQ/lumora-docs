@@ -2,84 +2,73 @@
 
 ## Entity Relationship Diagram
 
+The following diagram represents the main business domains and their relationships.
+
 ```mermaid
 erDiagram
 
-    COMPANY ||--o{ USERS : has
+    COMPANY ||--o{ USERS : contains
     COMPANY ||--o{ STORES : owns
-    COMPANY ||--o{ PRODUCTS : owns
-    COMPANY ||--o{ SUPPLIERS : manages
+    COMPANY ||--o{ PRODUCTS : manages
+    COMPANY ||--o{ SUPPLIERS : works_with
 
-    DEPARTMENT ||--o{ USERS : contains
-    ROLE ||--o{ USERS : assigned
+    USERS }o--|| DEPARTMENT : belongs_to
+    USERS }o--|| ROLE : has
 
-    STORES ||--o{ INVENTORY : manages
-    PRODUCTS ||--o{ INVENTORY : tracked
-
-    SUPPLIERS ||--o{ PRODUCTS : provides
+    STORES ||--o{ INVENTORY : controls
+    PRODUCTS ||--o{ INVENTORY : tracked_in
 
     STORES ||--o{ SALES : generates
     PRODUCTS ||--o{ SALES : sold
 
 
     COMPANY {
-        bigint id PK
-        varchar name
+        int id PK
+        string name
     }
 
     USERS {
-        bigint id PK
-        bigint company_id FK
-        bigint department_id FK
-        bigint role_id FK
-        varchar name
-        varchar email
+        int id PK
+        string name
+        string email
     }
 
     DEPARTMENT {
-        bigint id PK
-        bigint company_id FK
-        varchar name
+        int id PK
+        string name
     }
 
     ROLE {
-        bigint id PK
-        varchar name
+        int id PK
+        string name
     }
 
     STORES {
-        bigint id PK
-        bigint company_id FK
-        varchar name
-        varchar location
+        int id PK
+        string name
+        string location
     }
 
     PRODUCTS {
-        bigint id PK
-        bigint company_id FK
-        varchar sku
-        varchar description
-        varchar status
+        int id PK
+        string sku
+        string description
+        string status
     }
 
     INVENTORY {
-        bigint id PK
-        bigint store_id FK
-        bigint product_id FK
-        integer quantity
-        varchar status
+        int id PK
+        int quantity
+        string status
     }
 
     SUPPLIERS {
-        bigint id PK
-        bigint company_id FK
-        varchar name
+        int id PK
+        string name
     }
 
     SALES {
-        bigint id PK
-        bigint store_id FK
-        bigint product_id FK
+        int id PK
         date sale_date
         decimal amount
     }
@@ -87,25 +76,49 @@ erDiagram
 
 ---
 
-## Design Notes
+## Domain Overview
 
-The database model is designed following a multi-tenant SaaS architecture.
+The database model follows a multi-tenant SaaS architecture.
 
-Each COMPANY represents an independent business tenant with isolated data.
+Each COMPANY represents an independent business tenant with isolated business data.
 
-Main domains:
+Main business domains:
 
-- **Users Management**: Employees, departments and roles for access control.
-- **Stores Management**: Physical retail locations belonging to each company.
-- **Product Management**: Central product catalog.
-- **Inventory Management**: Stock availability by store and product.
-- **Procurement Management**: Supplier relationships and product sourcing.
-- **Sales Management**: Transaction data used for analytics and business intelligence.
+- **Users Management**
+    - Employees
+    - Departments
+    - Roles
+    - Access control
 
-The model is designed to support future extensions such as:
+- **Store Management**
+    - Retail locations
+    - Operational structure
 
-- Dashboard KPIs
+- **Product Management**
+    - Product catalog
+    - Product lifecycle
+
+- **Inventory Management**
+    - Stock availability
+    - Product tracking by store
+
+- **Procurement Management**
+    - Supplier relationships
+    - Product sourcing
+
+- **Sales Management**
+    - Sales transactions
+    - Business analytics data
+
+---
+
+## Future Extensions
+
+The model is designed to support future capabilities:
+
+- Executive dashboards
+- KPI analytics
 - AI-powered insights
-- Data analytics
 - Automated reports
-- External ERP integrations
+- ERP integrations
+- Advanced inventory forecasting
