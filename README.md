@@ -41,4 +41,12 @@ Under Development
 
 This repository contains the functional and technical documentation for the LUMORA platform.
 
-© 2026 LUMORA. All rights reserved.
+## Author
+
+**SONIA FRANCELLA ROJAS CASTILLO**
+
+Creator and Software Developer of LUMORAIQ
+
+AI-Powered Decision Intelligence Platform
+
+© 2026 LUMORAIQ. All rights reserved.
