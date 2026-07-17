@@ -188,3 +188,37 @@ Business data is logically isolated.
 - RESTful APIs
 - Separation of Concerns
 - Modular Design
+---
+
+## Backend Package Structure
+
+The backend follows a layered package organization:
+
+```text
+com.lumora
+
+├── controller
+│   Handles REST API endpoints
+
+├── service
+│   Contains business logic
+
+├── repository
+│   Handles database access
+
+├── model
+│   Contains domain entities
+
+├── dto
+│   Defines data transfer objects
+
+├── config
+│   Application configuration
+
+└── exception
+    Global error handling
+
+This structure ensures separation of responsibilities, maintainability and scalability.
+
+```
+
