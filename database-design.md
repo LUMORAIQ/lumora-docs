@@ -1,124 +1,245 @@
-# LUMORAIQ Database Design
+# Database Design
 
-## Entity Relationship Diagram
+## Overview
 
-The following diagram represents the main business domains and their relationships.
+LUMORA follows a **domain-driven database design**.
+
+Instead of documenting the entire database as a single Entity Relationship Diagram (ERD), the data model is organized into business domains. This approach improves readability, maintainability and scalability while reflecting how enterprise SaaS applications are typically documented.
+
+---
+
+# Identity Domain
+
+Responsible for user management, authentication and organizational structure.
 
 ```mermaid
 erDiagram
 
     COMPANY ||--o{ USERS : contains
-    COMPANY ||--o{ STORES : owns
-    COMPANY ||--o{ PRODUCTS : manages
-    COMPANY ||--o{ SUPPLIERS : works_with
-
+    USERS }o--|| ROLE : assigned
     USERS }o--|| DEPARTMENT : belongs_to
-    USERS }o--|| ROLE : has
-
-    STORES ||--o{ INVENTORY : controls
-    PRODUCTS ||--o{ INVENTORY : tracked_in
-
-    STORES ||--o{ SALES : generates
-    PRODUCTS ||--o{ SALES : sold
-
 
     COMPANY {
         int id PK
         string name
+        string legal_name
+        string tax_id
+        string industry
+        string country
+        datetime created_at
     }
 
     USERS {
         int id PK
-        string name
+        int company_id FK
+        int role_id FK
+        int department_id FK
+        string first_name
+        string last_name
         string email
-    }
-
-    DEPARTMENT {
-        int id PK
-        string name
+        string password_hash
+        boolean active
+        datetime created_at
     }
 
     ROLE {
         int id PK
         string name
-    }
-
-    STORES {
-        int id PK
-        string name
-        string location
-    }
-
-    PRODUCTS {
-        int id PK
-        string sku
         string description
-        string status
+        string permissions
+        boolean active
+        datetime created_at
     }
 
-    INVENTORY {
-        int id PK
-        int quantity
-        string status
-    }
-
-    SUPPLIERS {
+    DEPARTMENT {
         int id PK
         string name
-    }
-
-    SALES {
-        int id PK
-        date sale_date
-        decimal amount
+        string description
+        string cost_center
+        boolean active
+        datetime created_at
     }
 ```
 
 ---
 
-## Domain Overview
+# Operations Domain
 
-The database model follows a multi-tenant SaaS architecture.
+Responsible for retail operations including stores, products, suppliers and inventory.
 
-Each COMPANY represents an independent business tenant with isolated business data.
+```mermaid
+erDiagram
 
-Main business domains:
+    COMPANY ||--o{ STORES : owns
+    COMPANY ||--o{ PRODUCTS : manages
+    COMPANY ||--o{ SUPPLIERS : contracts
 
-- **Users Management**
-    - Employees
-    - Departments
-    - Roles
-    - Access control
+    STORES ||--o{ INVENTORY : stores
+    PRODUCTS ||--o{ INVENTORY : tracked
 
-- **Store Management**
-    - Retail locations
-    - Operational structure
+    STORES {
+        int id PK
+        int company_id FK
+        string name
+        string city
+        string country
+        string manager
+        boolean active
+        datetime created_at
+    }
 
-- **Product Management**
-    - Product catalog
-    - Product lifecycle
+    PRODUCTS {
+        int id PK
+        int company_id FK
+        string sku
+        string name
+        string description
+        decimal unit_price
+        string status
+        datetime created_at
+    }
 
-- **Inventory Management**
-    - Stock availability
-    - Product tracking by store
+    INVENTORY {
+        int id PK
+        int store_id FK
+        int product_id FK
+        int quantity
+        int minimum_stock
+        string status
+        datetime updated_at
+    }
 
-- **Procurement Management**
-    - Supplier relationships
-    - Product sourcing
-
-- **Sales Management**
-    - Sales transactions
-    - Business analytics data
+    SUPPLIERS {
+        int id PK
+        int company_id FK
+        string name
+        string contact_name
+        string email
+        string phone
+        string country
+        datetime created_at
+    }
+```
 
 ---
 
-## Future Extensions
+# Sales Domain
 
-The model is designed to support future capabilities:
+Responsible for sales transactions and business reporting.
 
-- Executive dashboards
-- KPI analytics
-- AI-powered insights
-- Automated reports
-- ERP integrations
-- Advanced inventory forecasting
+```mermaid
+erDiagram
+
+    STORES ||--o{ SALES : generates
+
+    STORES {
+        int id PK
+        string name
+        string city
+        boolean active
+    }
+
+    SALES {
+        int id PK
+        int store_id FK
+        date sale_date
+        decimal subtotal
+        decimal tax
+        decimal total
+        string payment_method
+        datetime created_at
+    }
+```
+
+---
+
+# Domain Summary
+
+## Identity
+
+Manages users and organizational structure.
+
+- Company
+- Users
+- Roles
+- Departments
+
+---
+
+## Operations
+
+Represents the operational side of the business.
+
+- Stores
+- Products
+- Inventory
+- Suppliers
+
+---
+
+## Sales
+
+Stores transactional information used for reporting and analytics.
+
+- Sales
+- Revenue
+- Executive KPIs
+
+---
+
+# Future Database Extensions
+
+The MVP intentionally keeps the schema simple.
+
+Future releases may introduce:
+
+## Customer Management
+
+- CUSTOMERS
+
+## Sales
+
+- SALE_ITEMS
+- PAYMENTS
+- RETURNS
+
+## Procurement
+
+- PURCHASE_ORDERS
+- PURCHASE_ITEMS
+
+## Inventory
+
+- WAREHOUSES
+- INVENTORY_MOVEMENTS
+- STOCK_ADJUSTMENTS
+
+## Product Catalog
+
+- CATEGORIES
+- BRANDS
+
+## Analytics
+
+- KPI_SNAPSHOTS
+- AI_RECOMMENDATIONS
+- FORECASTS
+
+## Security
+
+- AUDIT_LOGS
+- USER_SESSIONS
+
+---
+
+# Design Principles
+
+The database has been designed following enterprise software best practices.
+
+- Multi-tenant architecture
+- Domain-driven organization
+- Normalized relational model (3NF)
+- PostgreSQL compatible
+- Spring Data JPA ready
+- Scalable for SaaS environments
+- Designed for future AI and analytics capabilities
